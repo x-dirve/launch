@@ -50,3 +50,5 @@
         import Vue from "vue";
         Vue.use(launchWeapp);
         ```
+## TODO
+    1. 增加平台检测
