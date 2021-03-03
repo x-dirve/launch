@@ -1,0 +1,13 @@
+{
+    /*
+    * @description 编译器配置
+    * @param tabSize 默认tab为 4 个空格
+    * @param formatOnSave 保存时自动修复
+    */
+    "editor.tabSize": 4,
+    "editor.formatOnSave": true,
+    "explorer.autoReveal": false,
+    "search.exclude": {
+        "**/node_modules": false
+    }
+}
