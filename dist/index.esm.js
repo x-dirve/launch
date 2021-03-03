@@ -42,7 +42,7 @@ var labelReplaceExp = /\{(\w+)\}/g;
  * ```
  */
 function labelReplace(tpl, data, keep) {
-    if ( keep === void 0 ) keep = false;
+    if (keep === void 0) keep = false;
 
     return tpl.replace(labelReplaceExp, function (_, key) {
         var re = isObject(data) ? data[key] : data;
@@ -59,6 +59,14 @@ function labelReplace(tpl, data, keep) {
  */
 function isFunction(subject) {
     return is(subject, "function");
+}
+
+/**
+ * 是否是字符串
+ * @param  subject 待判断的数据
+ */
+function isString(subject) {
+    return is(subject, "string");
 }
 
 const ComponentName = "x-launch-weapp";
@@ -93,7 +101,7 @@ function getTplStr(type = "wechat") {
     if (TPLCache[type]) {
         return TPLCache[type];
     }
-    TPLCache[type] = getTypeTpl `<style>
+    TPLCache[type] = getTypeTpl`<style>
 :host {
     margin: 0;
     padding: 0;
@@ -173,7 +181,7 @@ customElements.define(ComponentName, XWechatLaunchWeapp);
  */
 function install(frame) {
     if (!isUndefined(frame)) {
-        if (isFunction(frame.component)) {
+        if (isString(frame.name) && frame.name.toLowerCase() === "vue" && isFunction(frame.component)) {
             frame.component(ComponentName);
         }
     }

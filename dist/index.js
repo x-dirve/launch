@@ -65,6 +65,14 @@ function isFunction(subject) {
     return is(subject, "function");
 }
 
+/**
+ * 是否是字符串
+ * @param  subject 待判断的数据
+ */
+function isString(subject) {
+    return is(subject, "string");
+}
+
 var templateObject = Object.freeze(["<style>\n:host {\n    margin: 0;\n    padding: 0;\n    position: relative;\n    display:inline-block;\n}\n.X-wechat-launch-weapp-slot {\n    z-index:0;\n    position:relative;\n}\n.X-wechat-launch-weapp-btn {\n    top: 0;\n    left: 0;\n    right: 0;\n    bottom: 0;\n    z-index: 3;\n    position: absolute;\n}\n</style>\n<div class=\"X-wechat-launch-weapp\">\n    <div class=\"X-wechat-launch-weapp-btn\">\n        <", " style=\"width:100%;height:100%;display:block;\" username=\"{username}\" path=\"{path}\">\n        <template>\n            <div style=\"{style}\"></div>\n        </template>\n        </", ">\n    </div>\n    <div class=\"X-wechat-launch-weapp-slot\">\n        <slot></slot>\n    </div>\n</div>"]);
 var ComponentName = "x-launch-weapp";
 /**支持的平台对应的标签 */
@@ -160,7 +168,7 @@ customElements.define(ComponentName, XWechatLaunchWeapp);
  */
 function install(frame) {
     if (!isUndefined(frame)) {
-        if (isFunction(frame.component)) {
+        if (isString(frame.name) && frame.name.toLowerCase() === "vue" && isFunction(frame.component)) {
             frame.component(ComponentName);
         }
     }

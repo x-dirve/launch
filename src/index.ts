@@ -1,4 +1,4 @@
-import { isFunction, isUndefined, labelReplace } from "@x-drive/utils";
+import { isFunction, isString, isUndefined, labelReplace } from "@x-drive/utils";
 const ComponentName = "x-launch-weapp";
 
 /**支持的平台对应的标签 */
@@ -131,7 +131,7 @@ customElements.define(ComponentName, XWechatLaunchWeapp);
  */
 function install(frame) {
     if (!isUndefined(frame)) {
-        if (isFunction(frame.component)) {
+        if (isString(frame.name) && frame.name.toLowerCase() === "vue" && isFunction(frame.component)) {
             frame.component(ComponentName);
         }
     }
