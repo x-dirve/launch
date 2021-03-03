@@ -11,7 +11,7 @@
 - 直接使用
     1. 引入模块
         ```ts
-        import launchWeapp from "@x-drive/x-launch-weapp;
+        import launchWeapp from "@x-drive/x-launch-weapp";
         ```
     1. 在 `html` 上使用
         ```html
