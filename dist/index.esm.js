@@ -60,6 +60,7 @@ function labelReplace(tpl, data, keep) {
 function isFunction(subject) {
     return is(subject, "function");
 }
+//# sourceMappingURL=index.esm.js.map
 
 const ComponentName = "x-launch-weapp";
 /**支持的平台对应的标签 */
@@ -115,7 +116,11 @@ function getTplStr(type = "wechat") {
 </style>
 <div class="X-wechat-launch-weapp">
     <div class="X-wechat-launch-weapp-btn">
-        <${type} style="width:100%;height:100%;display:block;" username="{username}" path="{path}"></${type}>
+        <${type} style="width:100%;height:100%;display:block;" username="{username}" path="{path}">
+        <template>
+            <div style="{style}"></div>
+        </template>
+        </${type}>
     </div>
     <div class="X-wechat-launch-weapp-slot">
         <slot></slot>
@@ -144,11 +149,14 @@ class XWechatLaunchWeapp extends HTMLElement {
     }
     connectedCallback() {
         const type = this.getAttribute("type");
-        const username = this.getAttribute("username") || "";
         const path = this.getAttribute("path") || "";
+        const username = this.getAttribute("username") || "";
+        const { width, height } = this.getBoundingClientRect();
+        const style = `width:${width}px;height:${height}px;display:block;background:#e92a2a54;`;
         this.root.innerHTML = labelReplace(getTplStr(type), {
             username,
-            path
+            path,
+            style
         });
     }
 }
