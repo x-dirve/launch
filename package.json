@@ -1,6 +1,6 @@
 {
     "name": "@x-drive/launch-weapp",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "公众号中拉起平台小程序",
     "author": "digiaries <digiaries@hotmail.com>",
     "main": "dist/index.js",
