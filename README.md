@@ -21,7 +21,7 @@
             username="gh_xxxxx"
             class="testWc"
         >
-            <img src="../38-luckdraw/imgs/win/btn.png" />
+            <img src="../luckdraw/imgs/win/btn.png" />
         </x-launch-weapp>
         ```
     1. 参数
@@ -31,7 +31,7 @@
         - `username` 小程序原始 `id`，必填
         - `debug` 显示调试用的半透明浮层
     1. 事件
-        事件返回值都在回传参数的 `detail` 字段中
+        事件返回值都在回传参数的 `detail` 字段中，可通过 `addEventListener` 监听事件或框架如果 `Vue` 的事件绑定方式监听。
         | 名称  | 返回值   | 备注                |
         | ----- | ------ | ------------------- |
         | ready | true   | 标签初始化完毕，可以进行点击操作 |
