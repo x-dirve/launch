@@ -64,7 +64,6 @@ function labelReplace(tpl, data, keep) {
 function isFunction(subject) {
     return is(subject, "function");
 }
-//# sourceMappingURL=index.esm.js.map
 
 var templateObject = Object.freeze(["<style>\n:host {\n    margin: 0;\n    padding: 0;\n    position: relative;\n    display:inline-block;\n}\n.X-wechat-launch-weapp-slot {\n    z-index:0;\n    position:relative;\n}\n.X-wechat-launch-weapp-btn {\n    top: 0;\n    left: 0;\n    right: 0;\n    bottom: 0;\n    z-index: 3;\n    position: absolute;\n}\n</style>\n<div class=\"X-wechat-launch-weapp\">\n    <div class=\"X-wechat-launch-weapp-btn\">\n        <", " style=\"width:100%;height:100%;display:block;\" username=\"{username}\" path=\"{path}\">\n        <template>\n            <div style=\"{style}\"></div>\n        </template>\n        </", ">\n    </div>\n    <div class=\"X-wechat-launch-weapp-slot\">\n        <slot></slot>\n    </div>\n</div>"]);
 var ComponentName = "x-launch-weapp";
@@ -134,10 +133,11 @@ var XWechatLaunchWeapp = /*@__PURE__*/(function (HTMLElement) {
         var type = this.getAttribute("type");
         var path = this.getAttribute("path") || "";
         var username = this.getAttribute("username") || "";
+        var debug = this.hasAttribute("debug");
         var ref = this.getBoundingClientRect();
         var width = ref.width;
         var height = ref.height;
-        var style = "width:" + width + "px;height:" + height + "px;display:block;background:#e92a2a54;";
+        var style = "width:" + width + "px;height:" + height + "px;display:block;" + (debug ? "background:#e92a2a54;" : "");
         this.root.innerHTML = labelReplace(getTplStr(type), {
             username: username,
             path: path,

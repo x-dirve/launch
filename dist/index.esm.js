@@ -60,7 +60,6 @@ function labelReplace(tpl, data, keep) {
 function isFunction(subject) {
     return is(subject, "function");
 }
-//# sourceMappingURL=index.esm.js.map
 
 const ComponentName = "x-launch-weapp";
 /**支持的平台对应的标签 */
@@ -151,8 +150,9 @@ class XWechatLaunchWeapp extends HTMLElement {
         const type = this.getAttribute("type");
         const path = this.getAttribute("path") || "";
         const username = this.getAttribute("username") || "";
+        const debug = this.hasAttribute("debug");
         const { width, height } = this.getBoundingClientRect();
-        const style = `width:${width}px;height:${height}px;display:block;background:#e92a2a54;`;
+        const style = `width:${width}px;height:${height}px;display:block;${debug ? "background:#e92a2a54;" : ""}`;
         this.root.innerHTML = labelReplace(getTplStr(type), {
             username,
             path,
