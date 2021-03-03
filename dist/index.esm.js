@@ -42,7 +42,7 @@ var labelReplaceExp = /\{(\w+)\}/g;
  * ```
  */
 function labelReplace(tpl, data, keep) {
-    if (keep === void 0) keep = false;
+    if ( keep === void 0 ) keep = false;
 
     return tpl.replace(labelReplaceExp, function (_, key) {
         var re = isObject(data) ? data[key] : data;
@@ -101,7 +101,7 @@ function getTplStr(type = "wechat") {
     if (TPLCache[type]) {
         return TPLCache[type];
     }
-    TPLCache[type] = getTypeTpl`<style>
+    TPLCache[type] = getTypeTpl `<style>
 :host {
     margin: 0;
     padding: 0;
@@ -123,7 +123,7 @@ function getTplStr(type = "wechat") {
 </style>
 <div class="X-wechat-launch-weapp">
     <div class="X-wechat-launch-weapp-btn">
-        <${type} style="width:100%;height:100%;display:block;" username="{username}" path="{path}">
+        <${type} id="COM_{id}" style="width:100%;height:100%;display:block;" username="{username}" path="{path}">
         <template>
             <div style="{style}"></div>
         </template>
@@ -135,16 +135,34 @@ function getTplStr(type = "wechat") {
 </div>`;
     return TPLCache[type];
 }
+var CID = 0;
 /**H5 拉起小程序 */
 class XWechatLaunchWeapp extends HTMLElement {
     constructor() {
         super();
+        /**模块自增 id */
+        this.xid = ++CID;
+        /**是否处于调试模式 */
+        this.isDebug = false;
         /**模块名称 */
         this.name = "x-launch-weapp";
         /**模块初始化状态 */
         this.status = false;
+        /**平台开放标签触发响应函数 */
+        this.onLaunch = (e) => {
+            this.bubbling("launch", e.detail);
+        };
+        /**平台开放标签错误响应函数 */
+        this.onError = (err) => {
+            this.bubbling("error", err);
+        };
+        /**平台开放标签准备完成 */
+        this.onReady = () => {
+            this.bubbling("ready", true);
+        };
         this.init();
     }
+    /**初始化 */
     init() {
         if (this.status) {
             return;
@@ -154,18 +172,47 @@ class XWechatLaunchWeapp extends HTMLElement {
         });
         this.status = true;
     }
+    /**
+     * 触发一个事件
+     * @param type   事件类型
+     * @param detail 事件数据
+     */
+    bubbling(type, detail) {
+        this.dispatchEvent(new CustomEvent(type, {
+            "bubbles": true,
+            "composed": true,
+            detail
+        }));
+    }
+    /**模块节点加载 */
     connectedCallback() {
         const type = this.getAttribute("type");
         const path = this.getAttribute("path") || "";
         const username = this.getAttribute("username") || "";
-        const debug = this.hasAttribute("debug");
+        this.isDebug = this.hasAttribute("debug");
         const { width, height } = this.getBoundingClientRect();
-        const style = `width:${width}px;height:${height}px;display:block;${debug ? "background:#e92a2a54;" : ""}`;
+        const style = `width:${width}px;height:${height}px;display:block;${this.isDebug ? "background:#e92a2a54;" : ""}`;
         this.root.innerHTML = labelReplace(getTplStr(type), {
             username,
             path,
-            style
+            style,
+            "id": this.xid
         });
+        this.openNode = this.querySelector(`#COM_${this.xid}`);
+        if (this.openNode) {
+            this.openNode.addEventListener("launch", this.onLaunch);
+            this.openNode.addEventListener("error", this.onError);
+            this.openNode.addEventListener("ready", this.onReady);
+        }
+    }
+    /**模块节点卸载 */
+    disconnectedCallback() {
+        if (this.openNode) {
+            this.openNode.removeEventListener("launch", this.onLaunch);
+            this.openNode.removeEventListener("error", this.onError);
+            this.openNode.removeEventListener("ready", this.onReady);
+            this.openNode = null;
+        }
     }
 }
 customElements.define(ComponentName, XWechatLaunchWeapp);

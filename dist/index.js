@@ -73,7 +73,7 @@ function isString(subject) {
     return is(subject, "string");
 }
 
-var templateObject = Object.freeze(["<style>\n:host {\n    margin: 0;\n    padding: 0;\n    position: relative;\n    display:inline-block;\n}\n.X-wechat-launch-weapp-slot {\n    z-index:0;\n    position:relative;\n}\n.X-wechat-launch-weapp-btn {\n    top: 0;\n    left: 0;\n    right: 0;\n    bottom: 0;\n    z-index: 3;\n    position: absolute;\n}\n</style>\n<div class=\"X-wechat-launch-weapp\">\n    <div class=\"X-wechat-launch-weapp-btn\">\n        <", " style=\"width:100%;height:100%;display:block;\" username=\"{username}\" path=\"{path}\">\n        <template>\n            <div style=\"{style}\"></div>\n        </template>\n        </", ">\n    </div>\n    <div class=\"X-wechat-launch-weapp-slot\">\n        <slot></slot>\n    </div>\n</div>"]);
+var templateObject = Object.freeze(["<style>\n:host {\n    margin: 0;\n    padding: 0;\n    position: relative;\n    display:inline-block;\n}\n.X-wechat-launch-weapp-slot {\n    z-index:0;\n    position:relative;\n}\n.X-wechat-launch-weapp-btn {\n    top: 0;\n    left: 0;\n    right: 0;\n    bottom: 0;\n    z-index: 3;\n    position: absolute;\n}\n</style>\n<div class=\"X-wechat-launch-weapp\">\n    <div class=\"X-wechat-launch-weapp-btn\">\n        <", " id=\"COM_{id}\" style=\"width:100%;height:100%;display:block;\" username=\"{username}\" path=\"{path}\">\n        <template>\n            <div style=\"{style}\"></div>\n        </template>\n        </", ">\n    </div>\n    <div class=\"X-wechat-launch-weapp-slot\">\n        <slot></slot>\n    </div>\n</div>"]);
 var ComponentName = "x-launch-weapp";
 /**支持的平台对应的标签 */
 var LaunchType = {
@@ -114,20 +114,40 @@ function getTplStr(type) {
     TPLCache[type] = getTypeTpl(templateObject, type, type);
     return TPLCache[type];
 }
+var CID = 0;
 /**H5 拉起小程序 */
 var XWechatLaunchWeapp = /*@__PURE__*/(function (HTMLElement) {
     function XWechatLaunchWeapp() {
+        var this$1 = this;
+
         HTMLElement.call(this);
+        /**模块自增 id */
+        this.xid = ++CID;
+        /**是否处于调试模式 */
+        this.isDebug = false;
         /**模块名称 */
         this.name = "x-launch-weapp";
         /**模块初始化状态 */
         this.status = false;
+        /**平台开放标签触发响应函数 */
+        this.onLaunch = function (e) {
+            this$1.bubbling("launch", e.detail);
+        };
+        /**平台开放标签错误响应函数 */
+        this.onError = function (err) {
+            this$1.bubbling("error", err);
+        };
+        /**平台开放标签准备完成 */
+        this.onReady = function () {
+            this$1.bubbling("ready", true);
+        };
         this.init();
     }
 
     if ( HTMLElement ) XWechatLaunchWeapp.__proto__ = HTMLElement;
     XWechatLaunchWeapp.prototype = Object.create( HTMLElement && HTMLElement.prototype );
     XWechatLaunchWeapp.prototype.constructor = XWechatLaunchWeapp;
+    /**初始化 */
     XWechatLaunchWeapp.prototype.init = function init () {
         if (this.status) {
             return;
@@ -137,20 +157,49 @@ var XWechatLaunchWeapp = /*@__PURE__*/(function (HTMLElement) {
         });
         this.status = true;
     };
+    /**
+     * 触发一个事件
+     * @param type   事件类型
+     * @param detail 事件数据
+     */
+    XWechatLaunchWeapp.prototype.bubbling = function bubbling (type, detail) {
+        this.dispatchEvent(new CustomEvent(type, {
+            "bubbles": true,
+            "composed": true,
+            detail: detail
+        }));
+    };
+    /**模块节点加载 */
     XWechatLaunchWeapp.prototype.connectedCallback = function connectedCallback () {
         var type = this.getAttribute("type");
         var path = this.getAttribute("path") || "";
         var username = this.getAttribute("username") || "";
-        var debug = this.hasAttribute("debug");
+        this.isDebug = this.hasAttribute("debug");
         var ref = this.getBoundingClientRect();
         var width = ref.width;
         var height = ref.height;
-        var style = "width:" + width + "px;height:" + height + "px;display:block;" + (debug ? "background:#e92a2a54;" : "");
+        var style = "width:" + width + "px;height:" + height + "px;display:block;" + (this.isDebug ? "background:#e92a2a54;" : "");
         this.root.innerHTML = labelReplace(getTplStr(type), {
             username: username,
             path: path,
-            style: style
+            style: style,
+            "id": this.xid
         });
+        this.openNode = this.querySelector(("#COM_" + (this.xid)));
+        if (this.openNode) {
+            this.openNode.addEventListener("launch", this.onLaunch);
+            this.openNode.addEventListener("error", this.onError);
+            this.openNode.addEventListener("ready", this.onReady);
+        }
+    };
+    /**模块节点卸载 */
+    XWechatLaunchWeapp.prototype.disconnectedCallback = function disconnectedCallback () {
+        if (this.openNode) {
+            this.openNode.removeEventListener("launch", this.onLaunch);
+            this.openNode.removeEventListener("error", this.onError);
+            this.openNode.removeEventListener("ready", this.onReady);
+            this.openNode = null;
+        }
     };
 
     return XWechatLaunchWeapp;
