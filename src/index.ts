@@ -1,5 +1,5 @@
 import { isFunction, isString, isUndefined, labelReplace } from "@x-drive/utils";
-const ComponentName = "x-launch-weapp";
+const ComponentName = "x-launch";
 
 // @ts-ignore
 function noop(e) { }

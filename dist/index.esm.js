@@ -69,7 +69,7 @@ function isString(subject) {
     return is(subject, "string");
 }
 
-const ComponentName = "x-launch-weapp";
+const ComponentName = "x-launch";
 /**支持的平台对应的标签 */
 const LaunchType = {
     /**微信 */

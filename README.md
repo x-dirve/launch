@@ -11,18 +11,18 @@
 - 直接使用
     1. 引入模块
         ```ts
-        import launchWeapp from "@x-drive/x-launch-weapp";
+        import launchWeapp from "@x-drive/x-launch";
         ```
     1. 在 `html` 上使用
         ```html
-        <x-launch-weapp
+        <x-launch
             type="wechat"
             path="/pages/custom/custom-page"
             username="gh_xxxxx"
             class="testWc"
         >
             <img src="../luckdraw/imgs/win/btn.png" />
-        </x-launch-weapp>
+        </x-launch>
         ```
     1. 参数
         - `type` 平台类型，目前只有微信一个渠道，且默认即为微信，可不填。支持取值：
@@ -42,11 +42,11 @@
 - Vue 中使用与直接使用类似。由于是自定义标签，直接使用的话 Vue 会有警告抛出来，可以有以下两种方式解决：
     - 在 `Vue.config.ignoredElements` 中加入 `x-launch-weapp`
         ```ts
-        Vue.config.ignoredElements = ["x-launch-weapp"];
+        Vue.config.ignoredElements = ["x-launch"];
         ```
     - 使用 `Vue.use`
         ```ts
-        import launchWeapp from "@x-drive/x-launch-weapp";
+        import launchWeapp from "@x-drive/x-launch";
         import Vue from "vue";
         Vue.use(launchWeapp);
         ```
