@@ -11,7 +11,7 @@
 - 直接使用
     1. 引入模块
         ```ts
-        import launchWeapp from "@x-drive/x-launch";
+        import xLaunch from "@x-drive/x-launch";
         ```
     1. 在 `html` 上使用
         ```html
@@ -46,9 +46,9 @@
         ```
     - 使用 `Vue.use`
         ```ts
-        import launchWeapp from "@x-drive/x-launch";
+        import xLaunch from "@x-drive/x-launch";
         import Vue from "vue";
-        Vue.use(launchWeapp);
+        Vue.use(xLaunch);
         ```
 ## TODO
     1. 增加平台检测
