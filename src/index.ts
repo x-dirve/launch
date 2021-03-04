@@ -46,11 +46,11 @@ function getTplStr(type: string = "wechat") {
     position: relative;
     display:inline-block;
 }
-.X-wechat-launch-weapp-slot {
+.X-launch-slot {
     z-index:0;
     position:relative;
 }
-.X-wechat-launch-weapp-btn {
+.X-launch-btn {
     top: 0;
     left: 0;
     right: 0;
@@ -59,15 +59,15 @@ function getTplStr(type: string = "wechat") {
     position: absolute;
 }
 </style>
-<div class="X-wechat-launch-weapp">
-    <div class="X-wechat-launch-weapp-btn">
-        <${type} id="COM_{id}" style="width:100%;height:100%;display:block;" username="{username}" path="{path}">
+<div class="X-launch">
+    <div class="X-launch-btn">
+        <${type} id="X_LAUNCH_COM_{id}" style="width:100%;height:100%;display:block;" username="{username}" path="{path}">
         <template>
             <div style="{style}"></div>
         </template>
         </${type}>
     </div>
-    <div class="X-wechat-launch-weapp-slot">
+    <div class="X-launch-slot">
         <slot></slot>
     </div>
 </div>`;
@@ -165,7 +165,7 @@ class XWechatLaunchWeapp extends HTMLElement {
             }
         );
 
-        this.openNode = this.querySelector(`#COM_${this.xid}`);
+        this.openNode = this.querySelector(`#X_LAUNCH_COM_${this.xid}`);
 
         if (this.openNode) {
             this.openNode.addEventListener("launch", this.onLaunch);
