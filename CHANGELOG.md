@@ -1,3 +1,8 @@
+## v1.0.6
+
+### Fix
+- fix: 修正开放标签事件没有绑定到的问题 [3c3294b](https://github.com/x-dirve/launch/commit/3c3294b42e7a44dcb4c47e7a28c45a89d81d5b69)
+
 ## v1.0.5
 
 ### Feat
