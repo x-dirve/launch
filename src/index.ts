@@ -83,8 +83,6 @@ function getTplStr(type: string = "wechat") {
     return TPLCache[type];
 }
 
-// username="{username}" path="{path}"
-
 var CID = 0;
 
 /**H5 拉起小程序 */
