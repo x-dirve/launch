@@ -1,3 +1,8 @@
+## v1.0.2
+
+### Feat
+- feat: 修改包名及相应说明 [c2bbd1d](https://github.com/x-dirve/launch-weapp/commit/c2bbd1d9efc5bfcf8e902630990510f72baa5d19)
+
 ## v1.0.1
 
 ### Feat
