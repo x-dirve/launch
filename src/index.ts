@@ -1,13 +1,12 @@
 import { isFunction, isString, isUndefined, labelReplace } from "@x-drive/utils";
 const ComponentName = "x-launch";
 
-// @ts-ignore
-function noop(e) { }
-
 /**支持的平台对应的标签 */
 const LaunchType = {
-    /**微信 */
+    /**微信拉起小程序 */
     "wechat": "wx-open-launch-weapp"
+    /**微信拉起 app */
+    , "wechatapp": "wx-open-launch-app"
 };
 
 /**模版缓存 */
@@ -26,6 +25,15 @@ function getTypeTpl(strs, ...rest) {
             case "wechat":
                 tpl += LaunchType.wechat;
                 break;
+            case "wechat-app":
+                tpl += LaunchType.wechatapp;
+                break;
+            case "wechat-props":
+                tpl += 'username="{username}" path="{path}"';
+                break;
+            case "wechat-app-props":
+                tpl += 'appid="{appid}" extinfo="{extinfo}"';
+                break;
         }
         return tpl;
     }, "");
@@ -39,6 +47,7 @@ function getTplStr(type: string = "wechat") {
     if (TPLCache[type]) {
         return TPLCache[type];
     }
+    const typeProps = `${type}-props`;
     TPLCache[type] = getTypeTpl`<style>
 :host {
     margin: 0;
@@ -61,7 +70,7 @@ function getTplStr(type: string = "wechat") {
 </style>
 <div class="X-launch">
     <div class="X-launch-btn">
-        <${type} id="X_LAUNCH_COM_{id}" style="width:100%;height:100%;display:block;" username="{username}" path="{path}">
+        <${type} id="X_LAUNCH_COM_{id}" style="width:100%;height:100%;display:block;" ${typeProps}>
         <template>
             <div style="{style}"></div>
         </template>
@@ -73,6 +82,8 @@ function getTplStr(type: string = "wechat") {
 </div>`;
     return TPLCache[type];
 }
+
+// username="{username}" path="{path}"
 
 var CID = 0;
 
@@ -150,6 +161,9 @@ class XLaunch extends HTMLElement {
         const type = this.getAttribute("type");
         const path = this.getAttribute("path") || "";
         const username = this.getAttribute("username") || "";
+        const appid = this.getAttribute("appid") || "";
+        const extinfo = this.getAttribute("extinfo") || "";
+
         this.isDebug = this.hasAttribute("debug");
 
         const { width, height } = this.getBoundingClientRect();
@@ -161,6 +175,8 @@ class XLaunch extends HTMLElement {
                 username
                 , path
                 , style
+                , appid
+                , extinfo
                 , "id": this.xid
             }
         );

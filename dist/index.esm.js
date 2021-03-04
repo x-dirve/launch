@@ -68,12 +68,16 @@ function isFunction(subject) {
 function isString(subject) {
     return is(subject, "string");
 }
+//# sourceMappingURL=index.esm.js.map
 
 const ComponentName = "x-launch";
 /**支持的平台对应的标签 */
 const LaunchType = {
-    /**微信 */
+    /**微信拉起小程序 */
     "wechat": "wx-open-launch-weapp"
+    /**微信拉起 app */
+    ,
+    "wechatapp": "wx-open-launch-app"
 };
 /**模版缓存 */
 const TPLCache = {};
@@ -89,6 +93,15 @@ function getTypeTpl(strs, ...rest) {
             case "wechat":
                 tpl += LaunchType.wechat;
                 break;
+            case "wechat-app":
+                tpl += LaunchType.wechatapp;
+                break;
+            case "wechat-props":
+                tpl += 'username="{username}" path="{path}"';
+                break;
+            case "wechat-app-props":
+                tpl += 'appid="{appid}" extinfo="{extinfo}"';
+                break;
         }
         return tpl;
     }, "");
@@ -101,6 +114,7 @@ function getTplStr(type = "wechat") {
     if (TPLCache[type]) {
         return TPLCache[type];
     }
+    const typeProps = `${type}-props`;
     TPLCache[type] = getTypeTpl `<style>
 :host {
     margin: 0;
@@ -108,11 +122,11 @@ function getTplStr(type = "wechat") {
     position: relative;
     display:inline-block;
 }
-.X-wechat-launch-weapp-slot {
+.X-launch-slot {
     z-index:0;
     position:relative;
 }
-.X-wechat-launch-weapp-btn {
+.X-launch-btn {
     top: 0;
     left: 0;
     right: 0;
@@ -121,23 +135,24 @@ function getTplStr(type = "wechat") {
     position: absolute;
 }
 </style>
-<div class="X-wechat-launch-weapp">
-    <div class="X-wechat-launch-weapp-btn">
-        <${type} id="COM_{id}" style="width:100%;height:100%;display:block;" username="{username}" path="{path}">
+<div class="X-launch">
+    <div class="X-launch-btn">
+        <${type} id="X_LAUNCH_COM_{id}" style="width:100%;height:100%;display:block;" ${typeProps}>
         <template>
             <div style="{style}"></div>
         </template>
         </${type}>
     </div>
-    <div class="X-wechat-launch-weapp-slot">
+    <div class="X-launch-slot">
         <slot></slot>
     </div>
 </div>`;
     return TPLCache[type];
 }
+// username="{username}" path="{path}"
 var CID = 0;
 /**H5 拉起小程序 */
-class XWechatLaunchWeapp extends HTMLElement {
+class XLaunch extends HTMLElement {
     constructor() {
         super();
         /**模块自增 id */
@@ -145,7 +160,7 @@ class XWechatLaunchWeapp extends HTMLElement {
         /**是否处于调试模式 */
         this.isDebug = false;
         /**模块名称 */
-        this.name = "x-launch-weapp";
+        this.name = "x-launch";
         /**模块初始化状态 */
         this.status = false;
         /**平台开放标签触发响应函数 */
@@ -189,6 +204,8 @@ class XWechatLaunchWeapp extends HTMLElement {
         const type = this.getAttribute("type");
         const path = this.getAttribute("path") || "";
         const username = this.getAttribute("username") || "";
+        const appid = this.getAttribute("appid") || "";
+        const extinfo = this.getAttribute("extinfo") || "";
         this.isDebug = this.hasAttribute("debug");
         const { width, height } = this.getBoundingClientRect();
         const style = `width:${width}px;height:${height}px;display:block;${this.isDebug ? "background:#e92a2a54;" : ""}`;
@@ -196,9 +213,11 @@ class XWechatLaunchWeapp extends HTMLElement {
             username,
             path,
             style,
+            appid,
+            extinfo,
             "id": this.xid
         });
-        this.openNode = this.querySelector(`#COM_${this.xid}`);
+        this.openNode = this.querySelector(`#X_LAUNCH_COM_${this.xid}`);
         if (this.openNode) {
             this.openNode.addEventListener("launch", this.onLaunch);
             this.openNode.addEventListener("error", this.onError);
@@ -215,15 +234,16 @@ class XWechatLaunchWeapp extends HTMLElement {
         }
     }
 }
-customElements.define(ComponentName, XWechatLaunchWeapp);
+/**注册模块名称 */
+customElements.define(ComponentName, XLaunch);
 /**
  * 提供给外部框架挂载用的方法
  * @param frame 框架对象
  * @example
  * ```ts
+ * import xLaunch from "[at]x-drive/x-launch";
  * import Vue from "vue";
- * import launchWeapp from "[at]x-drive/x-launch-weapp;
- * Vue.use(launchWeapp);
+ * Vue.use(xLaunch);
  * ```
  */
 function install(frame) {
@@ -235,4 +255,5 @@ function install(frame) {
 }
 
 export default install;
+export { XLaunch };
 //# sourceMappingURL=index.esm.js.map

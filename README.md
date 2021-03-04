@@ -1,10 +1,10 @@
 公众号中拉起平台小程序
 ================================
 
-封装了 html 页面中拉起平台小程序的开放标签的 web component 模块。
+由于官方的标签存在样式调整、动态内容渲染等方面的问题，因此封装了 html 页面中拉起平台小程序或 app 的开放标签的 web component 模块。
 
 ### 已支持平台
-- 微信
+- [微信](https://developers.weixin.qq.com/doc/offiaccount/OA_Web_Apps/Wechat_Open_Tag.html)
 
 ## 使用
 
@@ -26,9 +26,12 @@
         ```
     1. 参数
         - `type` 平台类型，目前只有微信一个渠道，且默认即为微信，可不填。支持取值：
-            - `wechat`，微信平台
-        - `path` 小程序落地页地址，必填
-        - `username` 小程序原始 `id`，必填
+            - `wechat`，拉起微信平台小程序
+            - `wechat-app`，微信平台拉起 app
+        - `path` 小程序落地页地址，选择 `wechat` 时必填
+        - `username` 小程序原始 `id`，选择 `wechat` 时必填
+        - `appid` 所需跳转的AppID，选择 `wechat-app` 时必填
+        - `extinfo` 跳转所需额外信息，选择 `wechat-app` 时必填
         - `debug` 显示调试用的半透明浮层
     1. 事件
         事件返回值都在回传参数的 `detail` 字段中，可通过 `addEventListener` 监听事件或框架如果 `Vue` 的事件绑定方式监听。
@@ -70,4 +73,3 @@
         ```
 ## TODO
     1. 增加平台检测
-    1. 支持拉起 app

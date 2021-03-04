@@ -72,13 +72,17 @@ function isFunction(subject) {
 function isString(subject) {
     return is(subject, "string");
 }
+//# sourceMappingURL=index.esm.js.map
 
-var templateObject = Object.freeze(["<style>\n:host {\n    margin: 0;\n    padding: 0;\n    position: relative;\n    display:inline-block;\n}\n.X-wechat-launch-weapp-slot {\n    z-index:0;\n    position:relative;\n}\n.X-wechat-launch-weapp-btn {\n    top: 0;\n    left: 0;\n    right: 0;\n    bottom: 0;\n    z-index: 3;\n    position: absolute;\n}\n</style>\n<div class=\"X-wechat-launch-weapp\">\n    <div class=\"X-wechat-launch-weapp-btn\">\n        <", " id=\"COM_{id}\" style=\"width:100%;height:100%;display:block;\" username=\"{username}\" path=\"{path}\">\n        <template>\n            <div style=\"{style}\"></div>\n        </template>\n        </", ">\n    </div>\n    <div class=\"X-wechat-launch-weapp-slot\">\n        <slot></slot>\n    </div>\n</div>"]);
+var templateObject = Object.freeze(["<style>\n:host {\n    margin: 0;\n    padding: 0;\n    position: relative;\n    display:inline-block;\n}\n.X-launch-slot {\n    z-index:0;\n    position:relative;\n}\n.X-launch-btn {\n    top: 0;\n    left: 0;\n    right: 0;\n    bottom: 0;\n    z-index: 3;\n    position: absolute;\n}\n</style>\n<div class=\"X-launch\">\n    <div class=\"X-launch-btn\">\n        <", " id=\"X_LAUNCH_COM_{id}\" style=\"width:100%;height:100%;display:block;\" ", ">\n        <template>\n            <div style=\"{style}\"></div>\n        </template>\n        </", ">\n    </div>\n    <div class=\"X-launch-slot\">\n        <slot></slot>\n    </div>\n</div>"]);
 var ComponentName = "x-launch";
 /**支持的平台对应的标签 */
 var LaunchType = {
-    /**微信 */
+    /**微信拉起小程序 */
     "wechat": "wx-open-launch-weapp"
+    /**微信拉起 app */
+    ,
+    "wechatapp": "wx-open-launch-app"
 };
 /**模版缓存 */
 var TPLCache = {};
@@ -97,6 +101,15 @@ function getTypeTpl(strs) {
             case "wechat":
                 tpl += LaunchType.wechat;
                 break;
+            case "wechat-app":
+                tpl += LaunchType.wechatapp;
+                break;
+            case "wechat-props":
+                tpl += 'username="{username}" path="{path}"';
+                break;
+            case "wechat-app-props":
+                tpl += 'appid="{appid}" extinfo="{extinfo}"';
+                break;
         }
         return tpl;
     }, "");
@@ -111,13 +124,15 @@ function getTplStr(type) {
     if (TPLCache[type]) {
         return TPLCache[type];
     }
-    TPLCache[type] = getTypeTpl(templateObject, type, type);
+    var typeProps = type + "-props";
+    TPLCache[type] = getTypeTpl(templateObject, type, typeProps, type);
     return TPLCache[type];
 }
+// username="{username}" path="{path}"
 var CID = 0;
 /**H5 拉起小程序 */
-var XWechatLaunchWeapp = /*@__PURE__*/(function (HTMLElement) {
-    function XWechatLaunchWeapp() {
+var XLaunch = /*@__PURE__*/(function (HTMLElement) {
+    function XLaunch() {
         var this$1 = this;
 
         HTMLElement.call(this);
@@ -126,7 +141,7 @@ var XWechatLaunchWeapp = /*@__PURE__*/(function (HTMLElement) {
         /**是否处于调试模式 */
         this.isDebug = false;
         /**模块名称 */
-        this.name = "x-launch-weapp";
+        this.name = "x-launch";
         /**模块初始化状态 */
         this.status = false;
         /**平台开放标签触发响应函数 */
@@ -144,11 +159,11 @@ var XWechatLaunchWeapp = /*@__PURE__*/(function (HTMLElement) {
         this.init();
     }
 
-    if ( HTMLElement ) XWechatLaunchWeapp.__proto__ = HTMLElement;
-    XWechatLaunchWeapp.prototype = Object.create( HTMLElement && HTMLElement.prototype );
-    XWechatLaunchWeapp.prototype.constructor = XWechatLaunchWeapp;
+    if ( HTMLElement ) XLaunch.__proto__ = HTMLElement;
+    XLaunch.prototype = Object.create( HTMLElement && HTMLElement.prototype );
+    XLaunch.prototype.constructor = XLaunch;
     /**初始化 */
-    XWechatLaunchWeapp.prototype.init = function init () {
+    XLaunch.prototype.init = function init () {
         if (this.status) {
             return;
         }
@@ -162,7 +177,7 @@ var XWechatLaunchWeapp = /*@__PURE__*/(function (HTMLElement) {
      * @param type   事件类型
      * @param detail 事件数据
      */
-    XWechatLaunchWeapp.prototype.bubbling = function bubbling (type, detail) {
+    XLaunch.prototype.bubbling = function bubbling (type, detail) {
         this.dispatchEvent(new CustomEvent(type, {
             "bubbles": true,
             "composed": true,
@@ -170,10 +185,12 @@ var XWechatLaunchWeapp = /*@__PURE__*/(function (HTMLElement) {
         }));
     };
     /**模块节点加载 */
-    XWechatLaunchWeapp.prototype.connectedCallback = function connectedCallback () {
+    XLaunch.prototype.connectedCallback = function connectedCallback () {
         var type = this.getAttribute("type");
         var path = this.getAttribute("path") || "";
         var username = this.getAttribute("username") || "";
+        var appid = this.getAttribute("appid") || "";
+        var extinfo = this.getAttribute("extinfo") || "";
         this.isDebug = this.hasAttribute("debug");
         var ref = this.getBoundingClientRect();
         var width = ref.width;
@@ -183,9 +200,11 @@ var XWechatLaunchWeapp = /*@__PURE__*/(function (HTMLElement) {
             username: username,
             path: path,
             style: style,
+            appid: appid,
+            extinfo: extinfo,
             "id": this.xid
         });
-        this.openNode = this.querySelector(("#COM_" + (this.xid)));
+        this.openNode = this.querySelector(("#X_LAUNCH_COM_" + (this.xid)));
         if (this.openNode) {
             this.openNode.addEventListener("launch", this.onLaunch);
             this.openNode.addEventListener("error", this.onError);
@@ -193,7 +212,7 @@ var XWechatLaunchWeapp = /*@__PURE__*/(function (HTMLElement) {
         }
     };
     /**模块节点卸载 */
-    XWechatLaunchWeapp.prototype.disconnectedCallback = function disconnectedCallback () {
+    XLaunch.prototype.disconnectedCallback = function disconnectedCallback () {
         if (this.openNode) {
             this.openNode.removeEventListener("launch", this.onLaunch);
             this.openNode.removeEventListener("error", this.onError);
@@ -202,17 +221,18 @@ var XWechatLaunchWeapp = /*@__PURE__*/(function (HTMLElement) {
         }
     };
 
-    return XWechatLaunchWeapp;
+    return XLaunch;
 }(HTMLElement));
-customElements.define(ComponentName, XWechatLaunchWeapp);
+/**注册模块名称 */
+customElements.define(ComponentName, XLaunch);
 /**
  * 提供给外部框架挂载用的方法
  * @param frame 框架对象
  * @example
  * ```ts
+ * import xLaunch from "[at]x-drive/x-launch";
  * import Vue from "vue";
- * import launchWeapp from "[at]x-drive/x-launch-weapp;
- * Vue.use(launchWeapp);
+ * Vue.use(xLaunch);
  * ```
  */
 function install(frame) {
@@ -223,5 +243,6 @@ function install(frame) {
     }
 }
 
+exports.XLaunch = XLaunch;
 exports.default = install;
 //# sourceMappingURL=index.js.map
