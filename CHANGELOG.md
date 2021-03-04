@@ -1,3 +1,8 @@
+## v1.0.5
+
+### Feat
+- feat: 支持拉起 app [49118a4](https://github.com/x-dirve/launch/commit/49118a44da024e666829d7178feea3a60cafbef0)
+
 ## v1.0.3
 
 ### Feat
