@@ -1,3 +1,8 @@
+## v1.0.3
+
+### Feat
+- feat: 支持自定义标签名 [d41e9a4](https://github.com/x-dirve/launch-weapp/commit/d41e9a4a0a67612abb117bb9bbd007303c7f92e3)
+
 ## v1.0.2
 
 ### Feat
