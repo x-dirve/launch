@@ -68,7 +68,6 @@ function isFunction(subject) {
 function isString(subject) {
     return is(subject, "string");
 }
-//# sourceMappingURL=index.esm.js.map
 
 const ComponentName = "x-launch";
 /**支持的平台对应的标签 */
@@ -149,7 +148,6 @@ function getTplStr(type = "wechat") {
 </div>`;
     return TPLCache[type];
 }
-// username="{username}" path="{path}"
 var CID = 0;
 /**H5 拉起小程序 */
 class XLaunch extends HTMLElement {
@@ -217,7 +215,7 @@ class XLaunch extends HTMLElement {
             extinfo,
             "id": this.xid
         });
-        this.openNode = this.querySelector(`#X_LAUNCH_COM_${this.xid}`);
+        this.openNode = this.root.querySelector(`#X_LAUNCH_COM_${this.xid}`);
         if (this.openNode) {
             this.openNode.addEventListener("launch", this.onLaunch);
             this.openNode.addEventListener("error", this.onError);

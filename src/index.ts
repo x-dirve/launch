@@ -179,7 +179,7 @@ class XLaunch extends HTMLElement {
             }
         );
 
-        this.openNode = this.querySelector(`#X_LAUNCH_COM_${this.xid}`);
+        this.openNode = this.root.querySelector(`#X_LAUNCH_COM_${this.xid}`);
 
         if (this.openNode) {
             this.openNode.addEventListener("launch", this.onLaunch);
