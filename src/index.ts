@@ -77,7 +77,7 @@ function getTplStr(type: string = "wechat") {
 var CID = 0;
 
 /**H5 拉起小程序 */
-class XWechatLaunchWeapp extends HTMLElement {
+class XLaunch extends HTMLElement {
     constructor() {
         super();
         this.init();
@@ -90,7 +90,7 @@ class XWechatLaunchWeapp extends HTMLElement {
     private isDebug = false;
 
     /**模块名称 */
-    name: string = "x-launch-weapp";
+    name: string = "x-launch";
 
     /**模块根结点 */
     private root: ShadowRoot;
@@ -185,16 +185,19 @@ class XWechatLaunchWeapp extends HTMLElement {
     }
 }
 
-customElements.define(ComponentName, XWechatLaunchWeapp);
+/**注册模块名称 */
+customElements.define(ComponentName, XLaunch);
+
+export { XLaunch };
 
 /**
  * 提供给外部框架挂载用的方法
  * @param frame 框架对象
  * @example
  * ```ts
+ * import xLaunch from "[at]x-drive/x-launch";
  * import Vue from "vue";
- * import launchWeapp from "[at]x-drive/x-launch-weapp;
- * Vue.use(launchWeapp);
+ * Vue.use(xLaunch);
  * ```
  */
 function install(frame) {

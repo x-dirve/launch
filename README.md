@@ -39,6 +39,24 @@
         | error | { errMsg: string } | 用户点击跳转按钮后出现错误 |
     1. 注意事项
         - 微信开放标签需要有一定内容才能正常使用，目前由于实现的问题暂时没能支持标签尺寸自动处理，因此需要在使用的时候 **`给标签设置合适的尺寸`**
+    1. 当因为某些原因不能直接使用默认的标签名时，可以模块导出的类自行重新注册一个合适的自定义标签使用
+        1. 重新注册名称
+            ```ts
+            import { XLaunch } from "@x-drive/x-launch"; 
+            customElements.define("slaunch", XLaunch);
+            ```
+        1. 处理可能存在的告警问题（参照下方内容）
+        1. 在项目中使用
+            ```html
+            <slaunch
+                type="wechat"
+                path="/pages/custom/custom-page"
+                username="gh_xxxxx"
+                class="testWc"
+            >
+                <img src="../luckdraw/imgs/win/btn.png" />
+            </slaunch>
+            ```
 - Vue 中使用与直接使用类似。由于是自定义标签，直接使用的话 Vue 会有警告抛出来，可以有以下两种方式解决：
     - 在 `Vue.config.ignoredElements` 中加入 `x-launch-weapp`
         ```ts
@@ -52,3 +70,4 @@
         ```
 ## TODO
     1. 增加平台检测
+    1. 支持拉起 app
