@@ -61,7 +61,7 @@
             </slaunch>
             ```
 - Vue 中使用与直接使用类似。由于是自定义标签，直接使用的话 Vue 会有警告抛出来，可以有以下两种方式解决：
-    - 在 `Vue.config.ignoredElements` 中加入 `x-launch-weapp`
+    - 在 `Vue.config.ignoredElements` 中加入 `x-launch`
         ```ts
         Vue.config.ignoredElements = ["x-launch"];
         ```
