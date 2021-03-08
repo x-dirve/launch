@@ -1,3 +1,8 @@
+## v1.0.7
+
+### Feat
+- feat: 增加 debug 开启时平台检测，增加获取类型名称对应的开放标签名称方法，增加平台操作、注意事项及相关功能的说明 [012464d](https://github.com/x-dirve/launch/commit/012464d59d648c90064531c2bf96e6552bc8e988)
+
 ## v1.0.6
 
 ### Fix
