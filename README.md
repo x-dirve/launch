@@ -1,12 +1,17 @@
 公众号中拉起平台小程序
 ================================
 
-由于官方的标签存在样式调整、动态内容渲染等方面的问题，因此封装了 html 页面中拉起平台小程序或 app 的开放标签的 web component 模块。
+由于官方的标签存在样式调整、动态内容渲染、标签嵌套等方面的问题，因此封装了 html 页面中拉起平台小程序或 app 的开放标签的 web component 模块。
 
 ### 已支持平台
 - [微信](https://developers.weixin.qq.com/doc/offiaccount/OA_Web_Apps/Wechat_Open_Tag.html)
 
 ## 使用
+
+- **注意事项**
+    1. 所有平台开放标签都需要在平台签名完成及 sdk 准备妥当后再加载到文档，如微信平台需要确保在能成功执行 `wx.ready` 状态下才渲染到页面上。
+    1. 需要在 sdk 上配置要启用的开放标签，如微信需要在 `wx.config` 中的 `openTagList` 配置中加入要渲染的标签名。
+    1. 权限配置字段最好不要空置，如微信 `jsApiList` 字段里至少加一个权限如 checkJsApi。
 
 - 直接使用
     1. 引入模块
@@ -71,5 +76,26 @@
         import Vue from "vue";
         Vue.use(xLaunch);
         ```
-## TODO
-    1. 增加平台检测
+## 相关功能
+
+- `install` 默认 export 对象，提供给外部框架挂载用的方法
+    ```ts
+    import xLaunch from "@x-drive/x-launch";
+    import Vue from "vue";
+    Vue.use(xLaunch);
+    ```
+- `XLaunch` H5 唤起模块，供重新注册或其他用途
+    ```ts
+    import { XLaunch } from "@x-drive/x-launch"; 
+    customElements.define("slaunch", XLaunch);
+    ```
+- `getOpenTagName` 获取类型名称对应的开放标签名称
+    ```ts
+    import { getOpenTagName } from "@x-drive/x-launch";
+    // ...
+    wx.config({
+        "appId": "..."
+        // ...
+        , "openTagList": [...getOpenTagName("wechat", "wechatapp")]
+    });
+    ```

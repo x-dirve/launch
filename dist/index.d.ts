@@ -1,4 +1,9 @@
-/**H5 拉起小程序 */
+declare global {
+    interface Window {
+        wx: any;
+    }
+}
+/**H5 唤起模块 */
 declare class XLaunch extends HTMLElement {
     constructor();
     /**模块自增 id */
@@ -33,6 +38,13 @@ declare class XLaunch extends HTMLElement {
     disconnectedCallback(): void;
 }
 export { XLaunch };
+/**
+ * 获取类型名称对应的开放标签名称
+ * @param type 开放标签名称
+ * @returns    开放标签名称，获取不到时会被过滤
+ */
+declare function getOpenTagName(...types: Array<"wechat" | "wechatapp">): string[];
+export { getOpenTagName };
 /**
  * 提供给外部框架挂载用的方法
  * @param frame 框架对象

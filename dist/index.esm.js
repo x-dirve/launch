@@ -148,8 +148,17 @@ function getTplStr(type = "wechat") {
 </div>`;
     return TPLCache[type];
 }
+function checkPlatform(type) {
+    switch (true) {
+        case /^wechat/.test(type):
+            return !isUndefined(window.wx);
+    }
+}
+function warn(msg) {
+    console.log(`%c[XLaunch] %c${msg}`, "color: cyan;", "color: yellow;");
+}
 var CID = 0;
-/**H5 拉起小程序 */
+/**H5 唤起模块 */
 class XLaunch extends HTMLElement {
     constructor() {
         super();
@@ -221,6 +230,9 @@ class XLaunch extends HTMLElement {
             this.openNode.addEventListener("error", this.onError);
             this.openNode.addEventListener("ready", this.onReady);
         }
+        if (this.isDebug && !checkPlatform(type)) {
+            warn(`当前环境中不存在与 [${LaunchType[type]}] 匹配的关键对象，请确认前置条件已准备妥当`);
+        }
     }
     /**模块节点卸载 */
     disconnectedCallback() {
@@ -234,6 +246,15 @@ class XLaunch extends HTMLElement {
 }
 /**注册模块名称 */
 customElements.define(ComponentName, XLaunch);
+/**
+ * 获取类型名称对应的开放标签名称
+ * @param type 开放标签名称
+ * @returns    开放标签名称，获取不到时会被过滤
+ */
+function getOpenTagName(...types) {
+    return types.map(type => LaunchType[type] || null)
+        .filter(type => Boolean(type));
+}
 /**
  * 提供给外部框架挂载用的方法
  * @param frame 框架对象
@@ -253,5 +274,5 @@ function install(frame) {
 }
 
 export default install;
-export { XLaunch };
+export { XLaunch, getOpenTagName };
 //# sourceMappingURL=index.esm.js.map

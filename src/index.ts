@@ -1,4 +1,11 @@
 import { isFunction, isString, isUndefined, labelReplace } from "@x-drive/utils";
+
+declare global {
+    interface Window {
+        wx: any;
+    }
+}
+
 const ComponentName = "x-launch";
 
 /**支持的平台对应的标签 */
@@ -83,9 +90,20 @@ function getTplStr(type: string = "wechat") {
     return TPLCache[type];
 }
 
+function checkPlatform(type:string) {
+    switch(true) {
+        case /^wechat/.test(type):
+            return !isUndefined(window.wx);
+    }
+}
+
+function warn(msg:string) {
+    console.log(`%c[XLaunch] %c${msg}`, "color: cyan;", "color: yellow;");
+}
+
 var CID = 0;
 
-/**H5 拉起小程序 */
+/**H5 唤起模块 */
 class XLaunch extends HTMLElement {
     constructor() {
         super();
@@ -186,6 +204,10 @@ class XLaunch extends HTMLElement {
             this.openNode.addEventListener("error", this.onError);
             this.openNode.addEventListener("ready", this.onReady);
         }
+
+        if (this.isDebug && !checkPlatform(type)) {
+            warn(`当前环境中不存在与 [${LaunchType[type]}] 匹配的关键对象，请确认前置条件已准备妥当`);
+        }
     }
 
     /**模块节点卸载 */
@@ -203,6 +225,17 @@ class XLaunch extends HTMLElement {
 customElements.define(ComponentName, XLaunch);
 
 export { XLaunch };
+
+/**
+ * 获取类型名称对应的开放标签名称
+ * @param type 开放标签名称
+ * @returns    开放标签名称，获取不到时会被过滤
+ */
+function getOpenTagName(...types: Array<"wechat" | "wechatapp">) {
+    return types.map(type => LaunchType[type] || null)
+                .filter(type => Boolean(type));
+}
+export { getOpenTagName };
 
 /**
  * 提供给外部框架挂载用的方法
