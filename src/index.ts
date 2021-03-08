@@ -90,6 +90,10 @@ function getTplStr(type: string = "wechat") {
     return TPLCache[type];
 }
 
+/**
+ * 检查标签、平台
+ * @param type 标签类型名称
+ */
 function checkPlatform(type:string) {
     switch(true) {
         case /^wechat/.test(type):
