@@ -99,3 +99,7 @@
         , "openTagList": [...getOpenTagName("wechat", "wechatapp")]
     });
     ```
+
+## 待办
+
+1. 支持 `React`
