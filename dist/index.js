@@ -72,6 +72,7 @@ function isFunction(subject) {
 function isString(subject) {
     return is(subject, "string");
 }
+//# sourceMappingURL=index.esm.js.map
 
 var templateObject = Object.freeze(["<style>\n:host {\n    margin: 0;\n    padding: 0;\n    position: relative;\n    display:inline-block;\n}\n.X-launch-slot {\n    z-index:0;\n    position:relative;\n}\n.X-launch-btn {\n    top: 0;\n    left: 0;\n    right: 0;\n    bottom: 0;\n    z-index: 3;\n    position: absolute;\n}\n</style>\n<div class=\"X-launch\">\n    <div class=\"X-launch-btn\">\n        <", " id=\"X_LAUNCH_COM_{id}\" style=\"width:100%;height:100%;display:block;\" ", ">\n        <template>\n            <div style=\"{style}\"></div>\n        </template>\n        </", ">\n    </div>\n    <div class=\"X-launch-slot\">\n        <slot></slot>\n    </div>\n</div>"]);
 var ComponentName = "x-launch";
@@ -127,6 +128,10 @@ function getTplStr(type) {
     TPLCache[type] = getTypeTpl(templateObject, type, typeProps, type);
     return TPLCache[type];
 }
+/**
+ * 检查标签、平台
+ * @param type 标签类型名称
+ */
 function checkPlatform(type) {
     switch (true) {
         case /^wechat/.test(type):

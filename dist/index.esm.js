@@ -68,6 +68,7 @@ function isFunction(subject) {
 function isString(subject) {
     return is(subject, "string");
 }
+//# sourceMappingURL=index.esm.js.map
 
 const ComponentName = "x-launch";
 /**支持的平台对应的标签 */
@@ -148,6 +149,10 @@ function getTplStr(type = "wechat") {
 </div>`;
     return TPLCache[type];
 }
+/**
+ * 检查标签、平台
+ * @param type 标签类型名称
+ */
 function checkPlatform(type) {
     switch (true) {
         case /^wechat/.test(type):

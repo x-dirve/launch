@@ -16,7 +16,7 @@
 - 直接使用
     1. 引入模块
         ```ts
-        import xLaunch from "@x-drive/x-launch";
+        import "@x-drive/x-launch";
         ```
     1. 在 `html` 上使用
         ```html
@@ -76,6 +76,7 @@
         import Vue from "vue";
         Vue.use(xLaunch);
         ```
+- React 中如果使用了 Typescript ，请参照下方 Typescript 部分
 ## 相关功能
 
 - `install` 默认 export 对象，提供给外部框架挂载用的方法
@@ -100,6 +101,18 @@
     });
     ```
 
-## 待办
+## TypeScript 中使用
 
-1. 支持 `React`
+- 由于 x-launch 是属于自定义标签，在 TypeScript 环境中使用会有以下报错
+    ```ts
+    Property 'x-launch' does not exist on type 'JSX.IntrinsicElements'.ts(2339)
+    ```
+    需要在工程的全局定义中引入以下声明
+    ```ts
+    declare namespace JSX {
+        interface IntrinsicElements {
+            [elem: string]: any;
+        }
+    }
+    ```
+    Vue 工程 JSX 的定义可能位于 `shims-tsx.d.ts` 中，React 可于 `react-app-env.d.ts` 中定义，或者查看 tsconfig 中相关设置，在合适的文件中添加
