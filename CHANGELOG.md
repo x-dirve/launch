@@ -1,3 +1,8 @@
+## v1.0.8
+
+### Feat
+- feat: 增加 react 及 typescript 中使用的相关指引 [03b3d50](https://github.com/x-dirve/launch/commit/03b3d50dc2291d14083e5980b11366df4ec7e5f5)
+
 ## v1.0.7
 
 ### Feat
