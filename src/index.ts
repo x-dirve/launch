@@ -24,7 +24,7 @@ const TPLCache = {};
  * @param strs 模版静态字符串段落数组
  * @param rest 模版插值数组
  */
-function getTypeTpl(strs, ...rest) {
+function getTypeTpl(strs, ...rest:string[]) {
     return strs.reduce((tpl, str, index) => {
         tpl += str;
 
