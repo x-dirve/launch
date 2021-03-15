@@ -68,7 +68,6 @@ function isFunction(subject) {
 function isString(subject) {
     return is(subject, "string");
 }
-//# sourceMappingURL=index.esm.js.map
 
 const ComponentName = "x-launch";
 /**支持的平台对应的标签 */
