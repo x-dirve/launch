@@ -1,24 +1,24 @@
-const { join } = require("path");
+const typescript = require("rollup-plugin-typescript2");
+const resolve = require("rollup-plugin-node-resolve");
+const cjs = require("rollup-plugin-commonjs");
 const alias = require("rollup-plugin-alias");
 const buble = require("rollup-plugin-buble");
 const babel = require("rollup-plugin-babel");
-const cjs = require("rollup-plugin-commonjs");
-const resolve = require("rollup-plugin-node-resolve");
-const typescript = require("rollup-plugin-typescript2");
+const { join } = require("path");
 
 const cwd = __dirname;
 
 const baseConfig = {
-    "input": join(cwd, "src/index.ts"),
-    "output": [
+    "input": join(cwd, "src/index.ts")
+    ,"output": [
         {
             "file": join(cwd, "dist/index.js")
             , "format": "cjs"
             , "sourcemap": true
             , "exports": "named"
         }
-    ],
-    "plugins": [
+    ]
+    ,"plugins": [
         resolve({
             "preferBuiltins": false
         })
@@ -98,14 +98,6 @@ const esmConfig = Object.assign({}, baseConfig, {
 })
 
 function rollup() {
-    const target = process.env.TARGET
-
-    if (target === "umd") {
-        return baseConfig
-    } else if (target === "esm") {
-        return esmConfig
-    } else {
-        return [baseConfig, esmConfig]
-    }
+    return [baseConfig, esmConfig];
 }
 module.exports = rollup()
