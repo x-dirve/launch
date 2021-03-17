@@ -1,11 +1,13 @@
 const typescript = require("rollup-plugin-typescript2");
 const resolve = require("rollup-plugin-node-resolve");
+const { terser } = require("rollup-plugin-terser");
 const cjs = require("rollup-plugin-commonjs");
 const alias = require("rollup-plugin-alias");
 const buble = require("rollup-plugin-buble");
 const babel = require("rollup-plugin-babel");
 const { join } = require("path");
 
+const isProduction = process.env.NODE_ENV === "production";
 const cwd = __dirname;
 
 const baseConfig = {
@@ -57,8 +59,26 @@ const baseConfig = {
         })
     ]
 }
+
+const umdConfig = {
+    "input": join(cwd, "src/index.ts")
+    , "output": [
+        {
+            "file": join(cwd, "dist/index.umd.js")
+            , "format": "umd"
+            , "sourcemap": false
+            , "exports": "named"
+            , "name": "xLaunch"
+        }
+    ]
+    , "plugins": [
+        ...baseConfig.plugins
+        , isProduction && terser()
+    ]
+}
+
 const esmConfig = Object.assign({}, baseConfig, {
-    output: Object.assign({}, baseConfig.output, {
+    "output": Object.assign({}, baseConfig.output, {
         "sourcemap": true
         , "format": "es"
         , "file": join(cwd, "dist/index.esm.js")
@@ -98,6 +118,6 @@ const esmConfig = Object.assign({}, baseConfig, {
 })
 
 function rollup() {
-    return [baseConfig, esmConfig];
+    return [baseConfig, umdConfig, esmConfig];
 }
 module.exports = rollup()
