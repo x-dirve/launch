@@ -18,6 +18,10 @@
         ```ts
         import "@x-drive/x-launch";
         ```
+        或者使用 `script` 标签加载 `index.umd.js` 文件
+        ```html
+        <script src="your_project/static_js/x-drive/x-launch/index.umd.js"></script>
+        ```
     1. 在 `html` 上使用
         ```html
         <x-launch

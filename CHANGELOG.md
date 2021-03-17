@@ -1,3 +1,8 @@
+## v1.0.10
+
+### Feat
+- feat: 支持 umd [4ef2c89](https://github.com/x-dirve/launch/commit/4ef2c8916e4f28b3c71060ad65dd8345b633b51d)
+
 ## v1.0.8
 
 ### Feat
