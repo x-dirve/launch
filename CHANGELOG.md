@@ -1,3 +1,8 @@
+## v1.0.11
+
+### Fix
+- fix: 各个事件不再向上冒泡 [a0f8c60](https://github.com/x-dirve/launch/commit/a0f8c60db7ee5da1a94ff2513805b81712a0e481)
+
 ## v1.0.10
 
 ### Feat
