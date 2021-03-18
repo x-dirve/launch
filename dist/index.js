@@ -190,8 +190,8 @@ var XLaunch = /*@__PURE__*/(function (HTMLElement) {
      */
     XLaunch.prototype.bubbling = function bubbling (type, detail) {
         this.dispatchEvent(new CustomEvent(type, {
-            "bubbles": true,
-            "composed": true,
+            "bubbles": false,
+            "composed": false,
             detail: detail
         }));
     };

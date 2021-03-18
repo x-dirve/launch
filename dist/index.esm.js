@@ -205,8 +205,8 @@ class XLaunch extends HTMLElement {
      */
     bubbling(type, detail) {
         this.dispatchEvent(new CustomEvent(type, {
-            "bubbles": true,
-            "composed": true,
+            "bubbles": false,
+            "composed": false,
             detail
         }));
     }

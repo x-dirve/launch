@@ -153,8 +153,8 @@ class XLaunch extends HTMLElement {
             new CustomEvent(
                 type
                 , {
-                    "bubbles": true
-                    , "composed": true
+                    "bubbles": false
+                    , "composed": false
                     , detail
                 }
             )
