@@ -16,10 +16,6 @@ declare class XLaunch extends HTMLElement {
     private root;
     /**平台开放标签对象 */
     private openNode;
-    /**模块初始化状态 */
-    private status;
-    /**初始化 */
-    private init;
     /**
      * 触发一个事件
      * @param type   事件类型

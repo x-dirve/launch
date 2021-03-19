@@ -68,7 +68,9 @@ function isFunction(subject) {
 function isString(subject) {
     return is(subject, "string");
 }
+//# sourceMappingURL=index.esm.js.map
 
+/**模块名称 */
 const ComponentName = "x-launch";
 /**支持的平台对应的标签 */
 const LaunchType = {
@@ -172,8 +174,6 @@ class XLaunch extends HTMLElement {
         this.isDebug = false;
         /**模块名称 */
         this.name = "x-launch";
-        /**模块初始化状态 */
-        this.status = false;
         /**平台开放标签触发响应函数 */
         this.onLaunch = (e) => {
             this.bubbling("launch", e.detail);
@@ -186,17 +186,6 @@ class XLaunch extends HTMLElement {
         this.onReady = () => {
             this.bubbling("ready", true);
         };
-        this.init();
-    }
-    /**初始化 */
-    init() {
-        if (this.status) {
-            return;
-        }
-        this.root = this.attachShadow({
-            "mode": "open"
-        });
-        this.status = true;
     }
     /**
      * 触发一个事件
@@ -212,6 +201,9 @@ class XLaunch extends HTMLElement {
     }
     /**模块节点加载 */
     connectedCallback() {
+        this.root = this.attachShadow({
+            "mode": "open"
+        });
         const type = this.getAttribute("type");
         const path = this.getAttribute("path") || "";
         const username = this.getAttribute("username") || "";
@@ -245,6 +237,7 @@ class XLaunch extends HTMLElement {
             this.openNode.removeEventListener("error", this.onError);
             this.openNode.removeEventListener("ready", this.onReady);
             this.openNode = null;
+            this.root = null;
         }
     }
 }
