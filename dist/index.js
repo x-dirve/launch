@@ -72,8 +72,10 @@ function isFunction(subject) {
 function isString(subject) {
     return is(subject, "string");
 }
+//# sourceMappingURL=index.esm.js.map
 
 var templateObject = Object.freeze(["<style>\n:host {\n    margin: 0;\n    padding: 0;\n    position: relative;\n    display:inline-block;\n}\n.X-launch-slot {\n    z-index:0;\n    position:relative;\n}\n.X-launch-btn {\n    top: 0;\n    left: 0;\n    right: 0;\n    bottom: 0;\n    z-index: 3;\n    position: absolute;\n}\n</style>\n<div class=\"X-launch\">\n    <div class=\"X-launch-btn\">\n        <", " id=\"X_LAUNCH_COM_{id}\" style=\"width:100%;height:100%;display:block;\" ", ">\n        <template>\n            <div style=\"{style}\"></div>\n        </template>\n        </", ">\n    </div>\n    <div class=\"X-launch-slot\">\n        <slot></slot>\n    </div>\n</div>"]);
+/**模块名称 */
 var ComponentName = "x-launch";
 /**支持的平台对应的标签 */
 var LaunchType = {
@@ -153,8 +155,6 @@ var XLaunch = /*@__PURE__*/(function (HTMLElement) {
         this.isDebug = false;
         /**模块名称 */
         this.name = "x-launch";
-        /**模块初始化状态 */
-        this.status = false;
         /**平台开放标签触发响应函数 */
         this.onLaunch = function (e) {
             this$1.bubbling("launch", e.detail);
@@ -167,22 +167,11 @@ var XLaunch = /*@__PURE__*/(function (HTMLElement) {
         this.onReady = function () {
             this$1.bubbling("ready", true);
         };
-        this.init();
     }
 
     if ( HTMLElement ) XLaunch.__proto__ = HTMLElement;
     XLaunch.prototype = Object.create( HTMLElement && HTMLElement.prototype );
     XLaunch.prototype.constructor = XLaunch;
-    /**初始化 */
-    XLaunch.prototype.init = function init () {
-        if (this.status) {
-            return;
-        }
-        this.root = this.attachShadow({
-            "mode": "open"
-        });
-        this.status = true;
-    };
     /**
      * 触发一个事件
      * @param type   事件类型
@@ -197,6 +186,9 @@ var XLaunch = /*@__PURE__*/(function (HTMLElement) {
     };
     /**模块节点加载 */
     XLaunch.prototype.connectedCallback = function connectedCallback () {
+        this.root = this.attachShadow({
+            "mode": "open"
+        });
         var type = this.getAttribute("type");
         var path = this.getAttribute("path") || "";
         var username = this.getAttribute("username") || "";
@@ -232,6 +224,7 @@ var XLaunch = /*@__PURE__*/(function (HTMLElement) {
             this.openNode.removeEventListener("error", this.onError);
             this.openNode.removeEventListener("ready", this.onReady);
             this.openNode = null;
+            this.root = null;
         }
     };
 

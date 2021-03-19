@@ -6,6 +6,7 @@ declare global {
     }
 }
 
+/**模块名称 */
 const ComponentName = "x-launch";
 
 /**支持的平台对应的标签 */
@@ -111,7 +112,6 @@ var CID = 0;
 class XLaunch extends HTMLElement {
     constructor() {
         super();
-        this.init();
     }
 
     /**模块自增 id */
@@ -128,20 +128,6 @@ class XLaunch extends HTMLElement {
 
     /**平台开放标签对象 */
     private openNode: Element;
-
-    /**模块初始化状态 */
-    private status = false;
-
-    /**初始化 */
-    private init() {
-        if (this.status) {
-            return;
-        }
-        this.root = this.attachShadow({
-            "mode": "open"
-        });
-        this.status = true;
-    }
 
     /**
      * 触发一个事件
@@ -178,9 +164,15 @@ class XLaunch extends HTMLElement {
 
     /**模块节点加载 */
     connectedCallback() {
+        this.root = this.attachShadow({
+            "mode": "open"
+        });
+
         const type = this.getAttribute("type");
+
         const path = this.getAttribute("path") || "";
         const username = this.getAttribute("username") || "";
+
         const appid = this.getAttribute("appid") || "";
         const extinfo = this.getAttribute("extinfo") || "";
 
@@ -221,6 +213,7 @@ class XLaunch extends HTMLElement {
             this.openNode.removeEventListener("error", this.onError);
             this.openNode.removeEventListener("ready", this.onReady);
             this.openNode = null;
+            this.root = null;
         }
     }
 }
