@@ -10,8 +10,11 @@ const { join } = require("path");
 const isProduction = process.env.NODE_ENV === "production";
 const cwd = __dirname;
 
+// 入口文件
+const input = join(cwd, "src/index.ts");
+
 const baseConfig = {
-    "input": join(cwd, "src/index.ts")
+    input
     ,"output": [
         {
             "file": join(cwd, "dist/index.js")
@@ -61,7 +64,7 @@ const baseConfig = {
 }
 
 const umdConfig = {
-    "input": join(cwd, "src/index.ts")
+    input
     , "output": [
         {
             "file": join(cwd, "dist/index.umd.js")
@@ -77,12 +80,13 @@ const umdConfig = {
     ]
 }
 
-const esmConfig = Object.assign({}, baseConfig, {
-    "output": Object.assign({}, baseConfig.output, {
+const esmConfig = {
+    input
+    , "output": {
         "sourcemap": true
         , "format": "es"
         , "file": join(cwd, "dist/index.esm.js")
-    })
+    }
     , "plugins": [
         babel({
             "babelrc": false,
@@ -115,9 +119,6 @@ const esmConfig = Object.assign({}, baseConfig, {
         })
         , typescript()
     ]
-})
-
-function rollup() {
-    return [baseConfig, umdConfig, esmConfig];
 }
-module.exports = rollup()
+
+module.exports = [baseConfig, umdConfig, esmConfig];
