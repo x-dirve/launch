@@ -1,3 +1,8 @@
+## v1.0.12
+
+### Fix
+- fix: 挂载的时候才做根结点的相关操作 [e4f6ae7](https://github.com/x-dirve/launch/commit/e4f6ae79a2e44a720531737f583f30bb99062af1)
+
 ## v1.0.11
 
 ### Fix
